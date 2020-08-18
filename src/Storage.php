@@ -8,8 +8,6 @@ use Generator;
  * A backend should always be accessed using a storage.
  * This class is not defined as an abstract since it contains no abstract functionality. But it should be extended
  * to provide functions abstracting the underlying table structure.
- *
- * @package Sx\Data
  */
 class Storage
 {

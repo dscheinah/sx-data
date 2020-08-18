@@ -5,8 +5,6 @@ use Generator;
 
 /**
  * This interface defines all methods expected from a database backend to be used with the Storages.
- *
- * @package Sx\Data
  */
 interface BackendInterface
 {

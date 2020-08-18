@@ -6,8 +6,6 @@ use Sx\Container\Injector;
 
 /**
  * Factory for any Storages which only requires the default Backend.
- *
- * @package Sx\Data
  */
 class StorageFactory implements FactoryInterface
 {

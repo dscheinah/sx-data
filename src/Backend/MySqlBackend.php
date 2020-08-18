@@ -10,8 +10,6 @@ use Sx\Data\BackendException;
 
 /**
  * This is a simple implementation of a database backend for MySQL using the mysql interface.
- *
- * @package Sx\Data\Backend
  */
 class MySqlBackend implements BackendInterface
 {

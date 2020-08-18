@@ -6,8 +6,6 @@ use Sx\Container\Injector;
 
 /**
  * The default implementation to create a MySqlBackend.
- *
- * @package Sx\Data\Backend
  */
 class MySqlBackendFactory implements FactoryInterface
 {
