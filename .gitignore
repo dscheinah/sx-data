@@ -1,3 +1,5 @@
+.phpunit*
+/clover.xml
 composer.phar
 /vendor/
 
