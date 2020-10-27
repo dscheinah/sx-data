@@ -2,11 +2,11 @@
 namespace Sx\Data\Backend;
 
 use Generator;
+use InvalidArgumentException;
 use mysqli;
 use mysqli_stmt;
-use RuntimeException;
-use Sx\Data\BackendInterface;
 use Sx\Data\BackendException;
+use Sx\Data\BackendInterface;
 
 /**
  * This is a simple implementation of a database backend for MySQL using the mysql interface.
@@ -112,13 +112,13 @@ class MySqlBackend implements BackendInterface
      *
      * @return int
      * @throws BackendException
-     * @throws RuntimeException
+     * @throws InvalidArgumentException
      */
     public function execute($resource, array $params = []): int
     {
         // Since the interface cannot provide type safety for the resource parameter it must be checked manually.
         if (!$resource instanceof mysqli_stmt) {
-            throw new RuntimeException('only mysql_stmt are supported for queries');
+            throw new InvalidArgumentException('only mysql_stmt are supported for queries');
         }
         // Parameter binding in MySQL needs type hints. So iterate all parameters and create the type sequence.
         $types = '';
