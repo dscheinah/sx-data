@@ -4,7 +4,7 @@
     "type": "library",
     "license": "GPL-3.0-or-later",
     "require": {
-        "php": "^7.3",
+        "php": "^7.3|^8.0",
         "dscheinah/sx-container": "^1.0"
     },
     "require-dev": {
