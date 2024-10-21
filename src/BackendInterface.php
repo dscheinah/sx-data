@@ -66,4 +66,28 @@ interface BackendInterface
      * @throws BackendException
      */
     public function insert($resource, array $params = []): int;
+
+    /**
+     * Is executed to begin a transaction.
+     *
+     * @return void
+     * @throws BackendException
+     */
+    public function begin(): void;
+
+    /**
+     * Is executed to commit the running transaction.
+     *
+     * @return void
+     * @throws BackendException
+     */
+    public function commit(): void;
+
+    /**
+     * Is executed to roll back the running transaction.
+     *
+     * @return void
+     * @throws BackendException
+     */
+    public function rollback(): void;
 }

@@ -199,4 +199,43 @@ class MySqlBackend implements BackendInterface
         $this->execute($resource, $params);
         return $resource->insert_id;
     }
+
+    /**
+     * Begins a transaction.
+     *
+     * @return void
+     * @throws BackendException
+     */
+    public function begin(): void
+    {
+        if (!$this->mysqli->begin_transaction()) {
+            throw new BackendException('error in begin: ' . $this->mysqli->error, $this->mysqli->errno);
+        }
+    }
+
+    /**
+     * Commits the running transaction.
+     *
+     * @return void
+     * @throws BackendException
+     */
+    public function commit(): void
+    {
+        if (!$this->mysqli->commit()) {
+            throw new BackendException('error in commit: ' . $this->mysqli->error, $this->mysqli->errno);
+        }
+    }
+
+    /**
+     * Rolls back the running transaction.
+     *
+     * @return void
+     * @throws BackendException
+     */
+    public function rollback(): void
+    {
+        if (!$this->mysqli->rollback()) {
+            throw new BackendException('error in rollback: ' . $this->mysqli->error, $this->mysqli->errno);
+        }
+    }
 }

@@ -105,6 +105,57 @@ namespace Sx\DataTest\Backend {
             $this->expectExceptionCode(42);
             iterator_to_array($this->backend->fetch(new mysqli_stmt(false, false, true)));
         }
+
+        public function testBegin(): void
+        {
+            try {
+                $this->backend->connect();
+                $this->backend->begin();
+                self::assertTrue(true);
+            } catch (BackendException $e) {
+                self::assertFalse(true);
+            }
+            try {
+                $this->backend->begin();
+                self::assertFalse(true);
+            } catch (BackendException $e) {
+                self::assertTrue(true);
+            }
+        }
+
+        public function testCommit(): void
+        {
+            try {
+                $this->backend->connect();
+                $this->backend->commit();
+                self::assertTrue(true);
+            } catch (BackendException $e) {
+                self::assertFalse(true);
+            }
+            try {
+                $this->backend->commit();
+                self::assertFalse(true);
+            } catch (BackendException $e) {
+                self::assertTrue(true);
+            }
+        }
+
+        public function testRollback(): void
+        {
+            try {
+                $this->backend->connect();
+                $this->backend->rollback();
+                self::assertTrue(true);
+            } catch (BackendException $e) {
+                self::assertFalse(true);
+            }
+            try {
+                $this->backend->rollback();
+                self::assertFalse(true);
+            } catch (BackendException $e) {
+                self::assertTrue(true);
+            }
+        }
     }
 }
 
@@ -123,6 +174,12 @@ namespace {
         public $errno = 0;
 
         public $error = '';
+
+        private $beginCounter = 0;
+
+        private $commitCounter = 0;
+
+        private $rollbackCounter = 0;
 
         public function __construct()
         {
@@ -164,6 +221,21 @@ namespace {
             $this->errno = 0;
             $this->error = '';
             return true;
+        }
+
+        public function begin_transaction(): bool
+        {
+            return !$this->beginCounter++;
+        }
+
+        public function commit(): bool
+        {
+            return !$this->commitCounter++;
+        }
+
+        public function rollback(): bool
+        {
+            return !$this->rollbackCounter++;
         }
     }
 

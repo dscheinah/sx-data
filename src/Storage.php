@@ -2,6 +2,7 @@
 namespace Sx\Data;
 
 use Generator;
+use Throwable;
 
 /**
  * Implements an abstraction for a database backend to be used in repositories.
@@ -84,6 +85,33 @@ class Storage
     {
         $resource = $this->getResource($statement);
         return $this->backend->insert($resource, $params);
+    }
+
+    /**
+     * Runs the given callback within a transaction.
+     * If the callback returns false or throws, the transaction is rolled back.
+     *
+     * @param callable():bool $function
+     *
+     * @return void
+     * @throws BackendException
+     */
+    public function transactional(callable $function): void
+    {
+        $this->backend->connect();
+        $this->backend->begin();
+        $success = false;
+        try {
+            $success = $function();
+        } catch (Throwable $e) {
+            throw new BackendException($e->getMessage(), $e->getCode(), $e);
+        } finally {
+            if ($success) {
+                $this->backend->commit();
+            } else {
+                $this->backend->rollback();
+            }
+        }
     }
 
     /**

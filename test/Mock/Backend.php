@@ -2,6 +2,7 @@
 namespace Sx\DataTest\Mock;
 
 use Generator;
+use Sx\Data\BackendException;
 use Sx\Data\BackendInterface;
 
 class Backend implements BackendInterface
@@ -18,6 +19,12 @@ class Backend implements BackendInterface
     public $fetched = [];
 
     public $inserted = [];
+
+    public $beginCalled = false;
+
+    public $commitCalled = false;
+
+    public $rollbackCalled = false;
 
     public function connect(): void
     {
@@ -47,5 +54,20 @@ class Backend implements BackendInterface
     {
         $this->inserted[$resource] = $params;
         return self::RESULT_1;
+    }
+
+    public function begin(): void
+    {
+       $this->beginCalled = true;
+    }
+
+    public function commit(): void
+    {
+        $this->commitCalled = true;
+    }
+
+    public function rollback(): void
+    {
+        $this->rollbackCalled = true;
     }
 }
