@@ -34,8 +34,8 @@ interface BackendInterface
      * It should return the number of affected rows. All errors are indicated by throwing an exception.
      * The given resource is always the result from a call to prepare. There is no need to support other resources.
      *
-     * @param mixed $resource
-     * @param array $params
+     * @param mixed        $resource
+     * @param array<mixed> $params
      *
      * @return int
      * @throws BackendException
@@ -47,8 +47,8 @@ interface BackendInterface
      * It must return a Generator to iterate over the complete result set.
      * The given resource is always the result from a call to prepare. There is no need to support other resources.
      *
-     * @param mixed $resource
-     * @param array $params
+     * @param mixed        $resource
+     * @param array<mixed> $params
      *
      * @return Generator
      * @throws BackendException
@@ -59,8 +59,8 @@ interface BackendInterface
      * Is executed for insert operations of the storage and must return the last insert ID.
      * The given resource is always the result from a call to prepare. There is no need to support other resources.
      *
-     * @param mixed $resource
-     * @param array $params
+     * @param mixed        $resource
+     * @param array<mixed> $params
      *
      * @return int
      * @throws BackendException

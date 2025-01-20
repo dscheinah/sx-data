@@ -22,7 +22,7 @@ class Storage
     /**
      * Cache for all resources from the backend. No statement will be prepared twice.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     private $statements = [];
 
@@ -41,8 +41,8 @@ class Storage
      * The statement is meant to contain placeholders for prepared statements to be bound with the params.
      * No user params must be included in the statement since only the params are escaped.
      *
-     * @param string $statement
-     * @param array  $params
+     * @param string       $statement
+     * @param array<mixed> $params
      *
      * @return int
      * @throws BackendException
@@ -58,8 +58,8 @@ class Storage
      * The statement is meant to contain placeholders for prepared statements to be bound with the params.
      * No user params must be included in the statement since only the params are escaped.
      *
-     * @param string $statement
-     * @param array  $params
+     * @param string       $statement
+     * @param array<mixed> $params
      *
      * @return Generator
      * @throws BackendException
@@ -75,8 +75,8 @@ class Storage
      * The statement is meant to contain placeholders for prepared statements to be bound with the params.
      * No user params must be included in the statement since only the params are escaped.
      *
-     * @param string $statement
-     * @param array  $params
+     * @param string       $statement
+     * @param array<mixed> $params
      *
      * @return int
      * @throws BackendException
@@ -117,12 +117,12 @@ class Storage
     /**
      * Retrieve a prepared statement from the database backend. Each prepared statement is cached by it's SQL.
      *
-     * @param $statement
+     * @param string $statement
      *
      * @return mixed
      * @throws BackendException
      */
-    private function getResource($statement)
+    private function getResource(string $statement)
     {
         $statement = trim($statement);
         // First connect or check connection.

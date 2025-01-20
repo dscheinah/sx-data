@@ -12,9 +12,9 @@ class StorageFactory implements FactoryInterface
     /**
      * Creates the requested Storages with the default Backend represented by BackendInterface.
      *
-     * @param Injector $injector
-     * @param array    $options
-     * @param string   $class
+     * @param Injector              $injector
+     * @param array<mixed>          $options
+     * @param class-string<Storage> $class
      *
      * @return Storage
      */

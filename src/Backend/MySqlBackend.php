@@ -17,9 +17,9 @@ class MySqlBackend implements BackendInterface
      * Defines all available options in the order of the mysqli constructor parameters.
      * This way the options values can be expanded in connect.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    private $options = [
+    private array $options = [
         'server' => null,
         'user' => null,
         'password' => null,
@@ -31,15 +31,15 @@ class MySqlBackend implements BackendInterface
     /**
      * The current mysqli instance. It will be created using connect.
      *
-     * @var mysqli
+     * @var mysqli|null
      */
-    private $mysqli;
+    private ?mysqli $mysqli = null;
 
     /**
      * Creates the backend and sets the options. Only options provided in the defaults will be applied.
      * To create the underlying mysqli instance, connect must be called.
      *
-     * @param array $options
+     * @param array<string, mixed> $options
      */
     public function __construct(array $options = [])
     {
@@ -72,7 +72,7 @@ class MySqlBackend implements BackendInterface
                 $this->mysqli->connect_errno
             );
         }
-        // Everything should be unicode by now. So simply assume this without an extra option.
+        // Everything should be Unicode by now. So simply assume this without an extra option.
         $this->mysqli->query('SET NAMES utf8;');
         $this->mysqli->query('SET CHARACTER SET utf8;');
         $this->mysqli->set_charset('utf8');
@@ -88,9 +88,9 @@ class MySqlBackend implements BackendInterface
      */
     public function prepare(string $statement): mysqli_stmt
     {
-        $resource = $this->mysqli->prepare($statement);
+        $resource = $this->mysqli?->prepare($statement);
         if (!$resource) {
-            throw new BackendException('error preparing statement: ' . $this->mysqli->error, $this->mysqli->errno);
+            throw new BackendException('error preparing statement: ' . $this->mysqli?->error, $this->mysqli?->errno ?: 0);
         }
         return $resource;
     }
@@ -101,8 +101,8 @@ class MySqlBackend implements BackendInterface
      * The given parameters must be correctly typed. Currently only numeric, bool and string are supported.
      * Each error is indicated by an exception since the affected rows can be zero for successful statements.
      *
-     * @param mysqli_stmt $resource
-     * @param array       $params
+     * @param resource|mysqli_stmt $resource
+     * @param array<mixed>         $params
      *
      * @return int
      * @throws BackendException
@@ -148,7 +148,7 @@ class MySqlBackend implements BackendInterface
         if (!$resource->execute()) {
             throw new BackendException('error executing: ' . $resource->error, $resource->errno);
         }
-        return $resource->affected_rows;
+        return (int) $resource->affected_rows;
     }
 
     /**
@@ -156,8 +156,8 @@ class MySqlBackend implements BackendInterface
      * is retrieved using a Generator to avoid high memory usage for partially read results.
      * If any error occurs an exception is thrown.
      *
-     * @param mysqli_stmt $resource
-     * @param array       $params
+     * @param mysqli_stmt  $resource
+     * @param array<mixed> $params
      *
      * @return Generator
      * @throws BackendException
@@ -181,8 +181,8 @@ class MySqlBackend implements BackendInterface
     /**
      * Executes the statement with the bound parameters using execute and return the last insert ID.
      *
-     * @param mysqli_stmt $resource
-     * @param array       $params
+     * @param mysqli_stmt  $resource
+     * @param array<mixed> $params
      *
      * @return int
      * @throws BackendException
@@ -191,7 +191,7 @@ class MySqlBackend implements BackendInterface
     {
         // The execute function will check the resource type and params.
         $this->execute($resource, $params);
-        return $resource->insert_id;
+        return (int) $resource->insert_id;
     }
 
     /**
@@ -202,8 +202,8 @@ class MySqlBackend implements BackendInterface
      */
     public function begin(): void
     {
-        if (!$this->mysqli->begin_transaction()) {
-            throw new BackendException('error in begin: ' . $this->mysqli->error, $this->mysqli->errno);
+        if (!$this->mysqli?->begin_transaction()) {
+            throw new BackendException('error in begin: ' . $this->mysqli?->error, $this->mysqli?->errno ?: 0);
         }
     }
 
@@ -215,8 +215,8 @@ class MySqlBackend implements BackendInterface
      */
     public function commit(): void
     {
-        if (!$this->mysqli->commit()) {
-            throw new BackendException('error in commit: ' . $this->mysqli->error, $this->mysqli->errno);
+        if (!$this->mysqli?->commit()) {
+            throw new BackendException('error in commit: ' . $this->mysqli?->error, $this->mysqli?->errno ?: 0);
         }
     }
 
@@ -228,8 +228,8 @@ class MySqlBackend implements BackendInterface
      */
     public function rollback(): void
     {
-        if (!$this->mysqli->rollback()) {
-            throw new BackendException('error in rollback: ' . $this->mysqli->error, $this->mysqli->errno);
+        if (!$this->mysqli?->rollback()) {
+            throw new BackendException('error in rollback: ' . $this->mysqli?->error, $this->mysqli?->errno ?: 0);
         }
     }
 }
