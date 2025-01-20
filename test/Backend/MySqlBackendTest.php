@@ -43,12 +43,6 @@ namespace Sx\DataTest\Backend {
             } catch (BackendException $e) {
                 self::assertEquals(42, $e->getCode());
             }
-            try {
-                $backend->connect();
-                self::assertTrue(false);
-            } catch (BackendException $e) {
-                self::assertEquals(42, $e->getCode());
-            }
         }
 
         public function testPrepare(): void
@@ -209,18 +203,6 @@ namespace {
 
         public function set_charset(): void
         {
-        }
-
-        public function ping(): bool
-        {
-            if (!self::$options) {
-                $this->errno = 42;
-                $this->error = 'error';
-                return false;
-            }
-            $this->errno = 0;
-            $this->error = '';
-            return true;
         }
 
         public function begin_transaction(): bool

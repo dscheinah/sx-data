@@ -51,22 +51,16 @@ class MySqlBackend implements BackendInterface
     }
 
     /**
-     * Creates the database connection on first call. Consecutive calls just check if the connection still exists.
-     * If the initial connection or the check fails an exception is thrown.
+     * Creates the database connection on first call.
+     * If the initial connection fails an exception is thrown.
      *
      * @throws BackendException
      */
     public function connect(): void
     {
         if ($this->mysqli) {
-            // Use the ping function to test if the connection is still alive.
+            // If the instance is present assume a connection and postpone errors to execution.
             // Do not attempt to reconnect as the application should not need to do that.
-            if (!$this->mysqli->ping()) {
-                throw new BackendException(
-                    'connection to mysql was lost: ' . $this->mysqli->error,
-                    $this->mysqli->errno
-                );
-            }
             return;
         }
         // Create the instance with the provided options. The options array has correctly ordered defaults and can not
